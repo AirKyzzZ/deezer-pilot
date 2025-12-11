@@ -2,12 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"; // Need to create Sheet or use Dialog as sidebar? 
-// Plan said "Sidebar/Drawer". Sheet is best. I didn't create Sheet component yet. 
-// I will simulate a Sheet using fixed position div or I should create the Sheet component.
-// For now, let's use a standard "History" button that opens a Dialog or a custom sidebar.
-// Given constraints, I'll create a custom sidebar drawer here or use the Dialog I made.
-// Let's use the Dialog for "History" to be safe since I have it.
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { History, ExternalLink, Music } from "lucide-react";

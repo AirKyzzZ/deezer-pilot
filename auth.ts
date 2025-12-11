@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import DeezerProvider from "next-auth/providers/deezer";
+import Deezer from "@/lib/providers/deezer";
 
 declare module "next-auth" {
   interface Session {
@@ -9,9 +9,9 @@ declare module "next-auth" {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    DeezerProvider({
-      clientId: process.env.DEEZER_CLIENT_ID,
-      clientSecret: process.env.DEEZER_CLIENT_SECRET,
+    Deezer({
+      clientId: process.env.DEEZER_CLIENT_ID!,
+      clientSecret: process.env.DEEZER_CLIENT_SECRET!,
       authorization: {
         params: {
           scope: "basic_access,email,offline_access,manage_library,delete_library",
