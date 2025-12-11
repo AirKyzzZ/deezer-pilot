@@ -12,14 +12,16 @@ Copy `.env.example` to `.env.local` and fill in your credentials:
 cp .env.example .env.local
 ```
 
-**Important:** Update `NEXTAUTH_URL` based on your environment:
-- **Local Development:** `NEXTAUTH_URL=http://localhost:3000`
-- **Production:** `NEXTAUTH_URL=https://your-domain.vercel.app`
+**Important:** Update `AUTH_URL` (or `NEXTAUTH_URL` for backward compatibility) based on your environment:
+- **Local Development:** `AUTH_URL=http://localhost:3000`
+- **Production:** `AUTH_URL=https://your-domain.vercel.app`
+
+Note: `AUTH_URL` takes precedence over `NEXTAUTH_URL` if both are set (NextAuth v5 convention).
 
 ### 2. Deezer App Configuration
 
 1. Go to [Deezer Developers](https://developers.deezer.com/myapps) and create an app
-2. Set the **Redirect URI** to match your `NEXTAUTH_URL`:
+2. Set the **Redirect URI** to match your `AUTH_URL` (or `NEXTAUTH_URL`):
    - Local: `http://localhost:3000/api/auth/callback/deezer`
    - Production: `https://your-domain.vercel.app/api/auth/callback/deezer`
 3. Copy your `DEEZER_CLIENT_ID` and `DEEZER_CLIENT_SECRET` to `.env.local`
@@ -50,7 +52,7 @@ See `ENV_SETUP.md` for detailed instructions on setting up environment variables
 
 When deploying to production:
 
-1. Update `NEXTAUTH_URL` in your `.env.local` (or Vercel environment variables)
+1. Update `AUTH_URL` (or `NEXTAUTH_URL`) in your `.env.local` (or Vercel environment variables)
 2. Update the redirect URI in your Deezer app settings to match
 3. Redeploy
 
@@ -61,6 +63,6 @@ See `ENV_SETUP.md` for more details.
 1. Push your code to GitHub
 2. Import your repository to [Vercel](https://vercel.com)
 3. Add all environment variables in Vercel's dashboard
-4. Set `NEXTAUTH_URL` to your Vercel domain
+4. Set `AUTH_URL` (or `NEXTAUTH_URL`) to your Vercel domain
 5. Update Deezer app redirect URI to match
 6. Deploy!
