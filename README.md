@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Deezer Pilot 🎵
 
-## Getting Started
+An AI-powered music concierge that uses Deezer API to create personalized playlists based on your mood and vibe.
 
-First, run the development server:
+## 🚀 Getting Started
+
+### 1. Environment Variables
+
+Copy `.env.example` to `.env.local` and fill in your credentials:
+
+```bash
+cp .env.example .env.local
+```
+
+**Important:** Update `NEXTAUTH_URL` based on your environment:
+- **Local Development:** `NEXTAUTH_URL=http://localhost:3000`
+- **Production:** `NEXTAUTH_URL=https://your-domain.vercel.app`
+
+### 2. Deezer App Configuration
+
+1. Go to [Deezer Developers](https://developers.deezer.com/myapps) and create an app
+2. Set the **Redirect URI** to match your `NEXTAUTH_URL`:
+   - Local: `http://localhost:3000/api/auth/callback/deezer`
+   - Production: `https://your-domain.vercel.app/api/auth/callback/deezer`
+3. Copy your `DEEZER_CLIENT_ID` and `DEEZER_CLIENT_SECRET` to `.env.local`
+
+### 3. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📋 Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+See `ENV_SETUP.md` for detailed instructions on setting up environment variables and switching between local and production environments.
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS + Custom Components
+- **Animations:** Framer Motion
+- **AI/LLM:** Vercel AI SDK with Google Gemini (Free Tier)
+- **Database:** Supabase
+- **Auth:** NextAuth.js v5 with Custom Deezer Provider
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📝 Switching Between Local and Production
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+When deploying to production:
 
-## Deploy on Vercel
+1. Update `NEXTAUTH_URL` in your `.env.local` (or Vercel environment variables)
+2. Update the redirect URI in your Deezer app settings to match
+3. Redeploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+See `ENV_SETUP.md` for more details.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚢 Deploy on Vercel
+
+1. Push your code to GitHub
+2. Import your repository to [Vercel](https://vercel.com)
+3. Add all environment variables in Vercel's dashboard
+4. Set `NEXTAUTH_URL` to your Vercel domain
+5. Update Deezer app redirect URI to match
+6. Deploy!

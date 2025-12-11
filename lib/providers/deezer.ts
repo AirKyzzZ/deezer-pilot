@@ -19,7 +19,7 @@ export default function Deezer<P extends DeezerProfile>(
       url: "https://connect.deezer.com/oauth/auth.php",
       params: {
         app_id: options.clientId,
-        redirect_uri: `${process.env.AUTH_URL || process.env.NEXTAUTH_URL}/api/auth/callback/deezer`,
+        redirect_uri: `${process.env.NEXTAUTH_URL || process.env.AUTH_URL || "http://localhost:3000"}/api/auth/callback/deezer`,
         perms: options.authorization?.params?.scope || "basic_access,email,offline_access,manage_library,delete_library",
         response_type: "code",
       },

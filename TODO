@@ -1,1 +1,9 @@
-☐ Make a CI/CD pipeline for the project with security check linter vercel deploy etc
+☐ There's two deezer.ts files i can make a confusion maybe rename one of them for better dev understanding
+☐ Make a CI/CD pipeline for the project with security check linter vercel deploy good practices etc
+☐ Make a context.md for the project using the web gemini chat
+☐ Make a full readme for the project
+☐ Fix linter errors
+☐ Add the logo as the icon in the browser tab
+☐ The deezerpilot logo needs to be bigger and also the connect to deezer button 
+☐ Make the bar for entering text the main element of the page it's supposed to be bigger and more visible for the ux perspective it's the first thing the user sees and it's supposed to be the main action of the page
+☐ The search icon on the right on hover needs to grow to the left and prints a text on hover "Search" with a little animation of the icon it must do a 360 on itself

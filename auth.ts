@@ -8,6 +8,7 @@ declare module "next-auth" {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true, // Required for Vercel and other hosting platforms
   providers: [
     Deezer({
       clientId: process.env.DEEZER_CLIENT_ID!,
