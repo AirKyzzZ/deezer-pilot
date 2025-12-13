@@ -7,9 +7,19 @@ declare module "next-auth" {
   }
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  trustHost: true, // Required for Vercel and other hosting platforms
-  providers: [
+// Check if Deezer credentials are available
+const hasDeezerCredentials = 
+  process.env.DEEZER_CLIENT_ID && 
+  process.env.DEEZER_CLIENT_SECRET;
+
+// Development mode flag
+export const isDevelopmentMode = !hasDeezerCredentials;
+
+// Build providers array conditionally
+const providers = [];
+
+if (hasDeezerCredentials) {
+  providers.push(
     Deezer({
       clientId: process.env.DEEZER_CLIENT_ID!,
       clientSecret: process.env.DEEZER_CLIENT_SECRET!,
@@ -18,8 +28,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           scope: "basic_access,email,offline_access,manage_library,delete_library",
         },
       },
-    }),
-  ],
+    })
+  );
+}
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true, // Required for Vercel and other hosting platforms
+  providers,
   callbacks: {
     async jwt({ token, account }) {
       if (account) {

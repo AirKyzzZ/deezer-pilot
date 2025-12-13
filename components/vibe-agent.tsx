@@ -41,7 +41,9 @@ export function VibeAgent() {
 
   const handleSaveToDeezer = async () => {
     if (!session?.accessToken || !result) {
-      toast.error("You must be logged in to save playlists.");
+      toast.error("Playlist saving requires Deezer authentication. Please configure DEEZER_CLIENT_ID and DEEZER_CLIENT_SECRET in your .env.local file.", {
+        duration: 5000,
+      });
       return;
     }
 
@@ -78,6 +80,8 @@ export function VibeAgent() {
       setIsSaving(false);
     }
   };
+
+  const canSaveToDeezer = !!session?.accessToken;
 
   // Calculate metrics for the chart (simplified estimation)
   const metrics = result
@@ -158,8 +162,9 @@ export function VibeAgent() {
                   <h2 className="text-2xl font-bold">Generated Tracks</h2>
                   <Button
                     onClick={handleSaveToDeezer}
-                    disabled={isSaving}
-                    className="bg-deezer-purple hover:bg-deezer-purple/90 gap-2"
+                    disabled={isSaving || !canSaveToDeezer}
+                    className="bg-deezer-purple hover:bg-deezer-purple/90 gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    title={!canSaveToDeezer ? "Deezer authentication required to save playlists" : undefined}
                   >
                     {isSaving ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -169,6 +174,11 @@ export function VibeAgent() {
                     Save to Deezer
                   </Button>
                 </div>
+                {!canSaveToDeezer && (
+                  <div className="p-3 rounded-lg border border-yellow-500/20 bg-yellow-500/5 text-yellow-200 text-sm">
+                    💡 <strong>Note:</strong> Playlist saving is disabled in development mode. Configure Deezer OAuth credentials to enable this feature.
+                  </div>
+                )}
                 <TrackList tracks={result.tracks} />
               </div>
             </div>

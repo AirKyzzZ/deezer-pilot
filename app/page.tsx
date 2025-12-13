@@ -1,5 +1,5 @@
 import { VibeAgent } from "@/components/vibe-agent";
-import { auth } from "@/auth";
+import { auth, isDevelopmentMode } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { PilotHistory } from "@/components/pilot-history";
 
@@ -8,6 +8,15 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-deezer)] bg-black text-white selection:bg-deezer-purple selection:text-white">
+      {/* Development Mode Banner */}
+      {isDevelopmentMode && (
+        <div className="max-w-6xl mx-auto mb-6 p-4 rounded-lg border border-yellow-500/30 bg-yellow-500/10 text-yellow-200 text-sm">
+          <strong>🔧 Development Mode:</strong> Deezer OAuth credentials not configured. 
+          You can still search for tracks, but playlist creation is disabled. 
+          See README for setup instructions.
+        </div>
+      )}
+      
       <header className="flex justify-between items-center max-w-6xl mx-auto mb-20 relative z-20">
         <div className="text-2xl font-black tracking-tighter">
           DEEZER <span className="text-deezer-purple">PILOT</span>
@@ -26,14 +35,14 @@ export default async function Home() {
                 </form>
                 <PilotHistory />
               </>
-            ) : (
+            ) : !isDevelopmentMode ? (
               <form action={async () => {
                 "use server"
                 await import("@/auth").then(m => m.signIn("deezer"))
               }}>
                 <Button className="rounded-full bg-white text-black hover:bg-gray-200 h-10 px-6 font-bold">Connect Deezer</Button>
               </form>
-            )}
+            ) : null}
         </div>
       </header>
 

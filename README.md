@@ -20,6 +20,13 @@ Note: `AUTH_URL` takes precedence over `NEXTAUTH_URL` if both are set (NextAuth 
 
 ### 2. Deezer App Configuration
 
+> **🔧 Development Mode Available:** If Deezer has blocked new app creation or you don't have credentials yet, you can still run the app! Simply leave `DEEZER_CLIENT_ID` and `DEEZER_CLIENT_SECRET` empty or unset in your `.env.local`. The app will run in development mode where:
+> - ✅ Track searching works (uses public Deezer API)
+> - ✅ AI-powered vibe generation works
+> - ❌ Playlist creation is disabled (requires OAuth)
+
+**To enable full functionality:**
+
 1. Go to [Deezer Developers](https://developers.deezer.com/myapps) and create an app
 2. Set the **Redirect URI** to match your `AUTH_URL` (or `NEXTAUTH_URL`):
    - Local: `http://localhost:3000/api/auth/callback/deezer`
