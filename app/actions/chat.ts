@@ -20,8 +20,11 @@ export interface VibeResult {
 }
 
 export async function generateVibe(userPrompt: string): Promise<VibeResult> {
+  // Use environment variable for model name, fallback to gemini-pro
+  const modelName = process.env.GOOGLE_AI_MODEL || "gemini-pro";
+  
   const { object } = await generateObject({
-    model: google("gemini-1.5-flash"),
+    model: google(modelName),
     schema: searchSchema,
     system: `You are a Vibe Agent for Deezer. Your goal is to translate abstract user moods and descriptions into technical search parameters for the Deezer API.
     
