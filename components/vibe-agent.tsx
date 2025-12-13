@@ -30,10 +30,20 @@ export function VibeAgent() {
 
     try {
       const data = await generateVibe(query);
+      if (data.tracks.length === 0) {
+        toast.error("No tracks found. Try a different search query or check the console for details.", {
+          duration: 5000,
+        });
+      }
       setResult(data);
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to generate vibe. Try again.");
+      console.error("Vibe generation error:", error);
+      toast.error(
+        error instanceof Error 
+          ? `Failed to generate vibe: ${error.message}` 
+          : "Failed to generate vibe. Try again.",
+        { duration: 5000 }
+      );
     } finally {
       setIsLoading(false);
     }
@@ -129,7 +139,7 @@ export function VibeAgent() {
           </div>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
-          Powered by GPT-4o & Deezer
+          Powered by Gemini & Deezer API
         </p>
       </div>
 
