@@ -7,6 +7,11 @@ import { SessionProvider } from "@/components/providers";
 export const metadata: Metadata = {
   title: "Deezer Pilot | AI Music Concierge",
   description: "Your personal AI music curator powered by Deezer",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
