@@ -1,18 +1,66 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import { Search, Loader2, Save } from "lucide-react";
+import { Search, Loader2, Save, Mic, MicOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DeezerTrack, createPlaylist, addTracksToPlaylist } from "@/lib/deezer-api";
+import { createPlaylist, addTracksToPlaylist } from "@/lib/deezer-api";
 import { generateVibe, VibeResult } from "@/app/actions/chat";
 import { TrackList } from "@/components/track-list";
 import { VibeChart } from "@/components/vibe-chart";
 import { supabase } from "@/lib/supabase";
+
+// Extend Window interface for SpeechRecognition
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+}
+
+interface SpeechRecognitionEvent {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+}
+
+interface SpeechRecognitionResult {
+  [index: number]: SpeechRecognitionAlternative;
+  length: number;
+  isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string;
+  message: string;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: {
+      new (): SpeechRecognition;
+    };
+    webkitSpeechRecognition: {
+      new (): SpeechRecognition;
+    };
+  }
+}
 
 export function VibeAgent() {
   const { data: session } = useSession();
@@ -20,6 +68,143 @@ export function VibeAgent() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<VibeResult | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isSpeechSupported, setIsSpeechSupported] = useState(false);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  // Check if speech recognition is supported
+  useEffect(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    setIsSpeechSupported(!!SpeechRecognition);
+
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = "en-US";
+
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
+        const transcript = event.results[0][0].transcript;
+        setQuery((prev) => (prev ? `${prev} ${transcript}` : transcript));
+        setIsRecording(false);
+        toast.success("Voice input captured!");
+      };
+
+      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+        setIsRecording(false);
+        
+        // Handle different error types
+        if (event.error === "not-allowed") {
+          console.error("Speech recognition error: not-allowed");
+          toast.error("Microphone permission denied. Please click the microphone icon again and allow access when prompted.");
+        } else if (event.error === "no-speech") {
+          // Silent failure - user might have just stopped talking
+          console.log("No speech detected");
+        } else if (event.error === "aborted") {
+          // User stopped recording manually or recognition was stopped
+          console.log("Recording aborted");
+        } else if (event.error === "network") {
+          // Network errors are common and often transient with Web Speech API
+          // Don't log to console to reduce noise - just notify user
+          toast.info("Network connection issue detected. Speech recognition requires internet. Please check your connection and try again.", {
+            duration: 3000,
+          });
+        } else if (event.error === "audio-capture") {
+          console.error("Speech recognition error: audio-capture");
+          toast.error("No microphone found or microphone is being used by another application.");
+        } else if (event.error === "service-not-allowed") {
+          console.error("Speech recognition error: service-not-allowed");
+          toast.error("Speech recognition service is not available. Please try again later.");
+        } else {
+          console.warn("Speech recognition error:", event.error);
+          toast.error(`Speech recognition error: ${event.error}. Please try again.`);
+        }
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognitionRef.current = recognition;
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  const requestMicrophonePermission = async (): Promise<boolean> => {
+    try {
+      // Check if we're on HTTPS or localhost (required for microphone access)
+      const isSecureContext = window.isSecureContext || 
+        window.location.protocol === 'https:' || 
+        window.location.hostname === 'localhost' || 
+        window.location.hostname === '127.0.0.1';
+
+      if (!isSecureContext) {
+        toast.error("Microphone access requires HTTPS or localhost.");
+        return false;
+      }
+
+      // Request microphone permission explicitly
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Stop the stream immediately - we just needed permission
+      stream.getTracks().forEach(track => track.stop());
+      return true;
+    } catch (error: unknown) {
+      console.error("Microphone permission error:", error);
+      const err = error as { name?: string; message?: string };
+      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+        toast.error("Microphone permission denied. Please allow microphone access in your browser settings.");
+      } else if (err.name === "NotFoundError") {
+        toast.error("No microphone found. Please connect a microphone and try again.");
+      } else {
+        toast.error("Failed to access microphone. Please check your browser settings.");
+      }
+      return false;
+    }
+  };
+
+  const toggleRecording = async () => {
+    if (!recognitionRef.current) {
+      toast.error("Speech recognition is not supported in your browser.");
+      return;
+    }
+
+    if (isRecording) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
+    } else {
+      // Request microphone permission first
+      const hasPermission = await requestMicrophonePermission();
+      if (!hasPermission) {
+        return;
+      }
+
+      try {
+        recognitionRef.current.start();
+        setIsRecording(true);
+        toast.info("Listening... Speak now!");
+      } catch (error: unknown) {
+        console.error("Error starting speech recognition:", error);
+        setIsRecording(false);
+        
+        // Handle specific errors
+        const err = error as { name?: string; message?: string };
+        if (err.name === "NotAllowedError" || err.message?.includes("not-allowed")) {
+          toast.error("Microphone permission denied. Please allow microphone access and try again.");
+        } else if (err.message?.includes("already started")) {
+          // Recognition is already running, just update state
+          setIsRecording(true);
+        } else {
+          toast.error("Failed to start recording. Please try again.");
+        }
+      }
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,21 +306,43 @@ export function VibeAgent() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Describe your vibe (e.g. 'Cyberpunk coding session at 2AM')"
-              className="pr-16 text-lg bg-black border-white/10"
-              disabled={isLoading}
+              className="pr-28 text-lg bg-black border-white/10"
+              disabled={isLoading || isRecording}
             />
-            <Button
-              type="submit"
-              size="icon"
-              className="absolute right-2 w-10 h-10 rounded-full bg-deezer-purple hover:bg-deezer-purple/90"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <Search className="w-5 h-5" />
+            <div className="absolute right-2 flex items-center gap-2">
+              {isSpeechSupported && (
+                <Button
+                  type="button"
+                  size="icon"
+                  onClick={toggleRecording}
+                  className={`w-10 h-10 rounded-full transition-all ${
+                    isRecording
+                      ? "bg-red-500 hover:bg-red-600 animate-pulse"
+                      : "bg-gray-700 hover:bg-gray-600"
+                  }`}
+                  disabled={isLoading}
+                  title={isRecording ? "Stop recording" : "Start voice input"}
+                >
+                  {isRecording ? (
+                    <MicOff className="w-5 h-5" />
+                  ) : (
+                    <Mic className="w-5 h-5" />
+                  )}
+                </Button>
               )}
-            </Button>
+              <Button
+                type="submit"
+                size="icon"
+                className="w-10 h-10 rounded-full bg-deezer-purple hover:bg-deezer-purple/90"
+                disabled={isLoading || isRecording}
+              >
+                {isLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Search className="w-5 h-5" />
+                )}
+              </Button>
+            </div>
           </div>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
