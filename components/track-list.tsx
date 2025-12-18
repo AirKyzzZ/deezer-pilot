@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Play, Pause } from "lucide-react";
-import { DeezerTrack } from "@/lib/deezer";
+import { DeezerTrack } from "@/lib/deezer-api";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 

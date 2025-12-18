@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DeezerTrack, createPlaylist, addTracksToPlaylist } from "@/lib/deezer";
+import { DeezerTrack, createPlaylist, addTracksToPlaylist } from "@/lib/deezer-api";
 import { generateVibe, VibeResult } from "@/app/actions/chat";
 import { TrackList } from "@/components/track-list";
 import { VibeChart } from "@/components/vibe-chart";

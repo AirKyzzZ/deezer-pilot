@@ -135,4 +135,3 @@ export async function addTracksToPlaylist(playlistId: number, trackIds: number[]
   
   return await res.json();
 }
-

@@ -3,7 +3,7 @@
 import { generateObject } from "ai";
 import { google } from "@ai-sdk/google";
 import { z } from "zod";
-import { searchDeezerTracks, type DeezerTrack } from "@/lib/deezer";
+import { searchDeezerTracks, type DeezerTrack } from "@/lib/deezer-api";
 
 const searchSchema = z.object({
   query: z.string().describe("The search terms for the music (e.g. genre, mood, keywords)"),
