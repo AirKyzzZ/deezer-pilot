@@ -2,6 +2,7 @@
 ☐ Make a CI/CD pipeline for the project with security check linter vercel deploy good practices etc
 ☐ Make a context.md for the project using the web gemini chat
 ☐ Make a full readme for the project
+☐ Add a microphone icon to the input field to allow the user to speak to the agent
 ☐ Fix linter errors
 ☐ Add the logo as the icon in the browser tab
 ☐ Add a button to get more songs than the fist request so make a second request with different songs but the same query
