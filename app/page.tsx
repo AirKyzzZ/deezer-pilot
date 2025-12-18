@@ -19,7 +19,7 @@ export default async function Home() {
       )}
       
       <header className="flex justify-between items-center max-w-6xl mx-auto mb-20 relative z-20">
-        <div className="text-2xl font-black tracking-tighter">
+        <div className="text-5xl font-black tracking-normal">
           DEEZER <span className="text-deezer-purple">PILOT</span>
         </div>
         <div className="flex gap-4 items-center">
@@ -39,9 +39,9 @@ export default async function Home() {
             ) : (
               <Button 
                 disabled 
-                className="rounded-full bg-gray-600/50 text-gray-400 cursor-not-allowed h-10 px-6 font-bold gap-2"
+                className="rounded-full bg-gray-600/50 text-gray-400 cursor-not-allowed h-14 px-8 text-lg font-bold gap-2"
               >
-                <Lock className="w-4 h-4" />
+                <Lock className="w-5 h-5" />
                 Connect Deezer
               </Button>
             )}
