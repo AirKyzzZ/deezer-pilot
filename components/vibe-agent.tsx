@@ -139,7 +139,7 @@ export function VibeAgent() {
           </div>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
-          Powered by Gemini & Deezer API
+          Powered by AI & Deezer API
         </p>
       </div>
 
