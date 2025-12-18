@@ -1,13 +1,13 @@
 ✔ There's two deezer.ts files i can make a confusion maybe rename one of them for better dev understanding @done(25-12-18 22:33)
-☐ Add a microphone icon to the input field to allow the user to speak to the agent
-☐ The button "connect to deezer" for now needs to be a bit more gray add a lock icon because deezer dosn't allow to create new apps / get api keys for now
+✔ Add a microphone icon to the input field to allow the user to speak to the agent @done(25-12-18 22:54)
+✔ The button "connect to deezer" for now needs to be a bit more gray add a lock icon because deezer dosn't allow to create new apps / get api keys for now @done(25-12-18 22:55)
 ☐ Add the logo as the icon in the browser tab
-☐ Separate the code well, not 500 lines of code in one file refactor and make sure the code is clean maintanable east to understand and pretty
 ☐ Add a button to get more songs than the fist request so make a second request with different songs but the same query
 ☐ The deezerpilot logo needs to be bigger and also the connect to deezer button 
 ☐ OPUS 4.5 : I want to change how the algorithm is made because i want to have more of the actual work done at the LLM level and the api call to deezer for example if i input 'i like glaive do you got anything similar ?' results right now are ONLY songs from glaive because the model only kept glaive and made a request, the goal is to have a deeper global understanding of the users emotions and intentions for example if they type a request like 'i feel lonely it's 3am at night' the model should be able to have a deepr understading of users emotions to make a better request to the deezer api. Enhance the curent algorithm and write better excplainations for the user
 ☐ Make the bar for entering text the main element of the page it's supposed to be bigger and more visible for the ux perspective it's the first thing the user sees and it's supposed to be the main action of the page
 ☐ The search icon on the right on hover needs to grow to the left and prints a text on hover "Search" with a little animation of the icon it must do a 360 on itself
+☐ Separate the code well, not 500 lines of code in one file refactor and make sure the code is clean maintanable east to understand and pretty
 ☐ Fix linter errors
 ☐ Make a full readme for the project
 ☐ Make a context.md for the project using the web gemini chat

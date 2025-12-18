@@ -2,6 +2,7 @@ import { VibeAgent } from "@/components/vibe-agent";
 import { auth, isDevelopmentMode } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { PilotHistory } from "@/components/pilot-history";
+import { Lock } from "lucide-react";
 
 export default async function Home() {
   const session = await auth();
@@ -35,14 +36,15 @@ export default async function Home() {
                 </form>
                 <PilotHistory />
               </>
-            ) : !isDevelopmentMode ? (
-              <form action={async () => {
-                "use server"
-                await import("@/auth").then(m => m.signIn("deezer"))
-              }}>
-                <Button className="rounded-full bg-white text-black hover:bg-gray-200 h-10 px-6 font-bold">Connect Deezer</Button>
-              </form>
-            ) : null}
+            ) : (
+              <Button 
+                disabled 
+                className="rounded-full bg-gray-600/50 text-gray-400 cursor-not-allowed h-10 px-6 font-bold gap-2"
+              >
+                <Lock className="w-4 h-4" />
+                Connect Deezer
+              </Button>
+            )}
         </div>
       </header>
 
