@@ -293,12 +293,12 @@ export function VibeAgent() {
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-12">
-      {/* Search Section */}
-      <div className="relative w-full max-w-2xl mx-auto z-10">
+      {/* Search Section - Hero Element */}
+      <div className="relative w-full max-w-4xl mx-auto z-10 pt-8 md:pt-16">
         <form onSubmit={handleSubmit} className="relative group">
           <div
-            className={`absolute -inset-1 bg-gradient-to-r from-deezer-purple to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 ${
-              isLoading ? "animate-pulse-glow opacity-100" : ""
+            className={`absolute -inset-2 bg-gradient-to-r from-deezer-purple to-purple-600 rounded-full blur-xl opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200 ${
+              isLoading ? "animate-pulse-glow opacity-80" : ""
             }`}
           ></div>
           <div className="relative flex items-center">
@@ -306,16 +306,16 @@ export function VibeAgent() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Describe your vibe (e.g. 'Cyberpunk coding session at 2AM')"
-              className="pr-28 text-lg bg-black border-white/10"
+              className="pr-36 h-20 text-2xl md:text-3xl bg-black/80 border-white/20 backdrop-blur-sm placeholder:text-gray-500 focus-visible:border-deezer-purple/50 focus-visible:ring-deezer-purple/30"
               disabled={isLoading || isRecording}
             />
-            <div className="absolute right-2 flex items-center gap-2">
+            <div className="absolute right-3 flex items-center gap-3">
               {isSpeechSupported && (
                 <Button
                   type="button"
                   size="icon"
                   onClick={toggleRecording}
-                  className={`w-10 h-10 rounded-full transition-all ${
+                  className={`w-14 h-14 rounded-full transition-all ${
                     isRecording
                       ? "bg-red-500 hover:bg-red-600 animate-pulse"
                       : "bg-gray-700 hover:bg-gray-600"
@@ -324,28 +324,28 @@ export function VibeAgent() {
                   title={isRecording ? "Stop recording" : "Start voice input"}
                 >
                   {isRecording ? (
-                    <MicOff className="w-5 h-5" />
+                    <MicOff className="w-6 h-6" />
                   ) : (
-                    <Mic className="w-5 h-5" />
+                    <Mic className="w-6 h-6" />
                   )}
                 </Button>
               )}
               <Button
                 type="submit"
                 size="icon"
-                className="w-10 h-10 rounded-full bg-deezer-purple hover:bg-deezer-purple/90"
+                className="w-14 h-14 rounded-full bg-deezer-purple hover:bg-deezer-purple/90 shadow-lg shadow-deezer-purple/30"
                 disabled={isLoading || isRecording}
               >
                 {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-6 h-6 animate-spin" />
                 ) : (
-                  <Search className="w-5 h-5" />
+                  <Search className="w-6 h-6" />
                 )}
               </Button>
             </div>
           </div>
         </form>
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="text-center text-sm text-gray-500 mt-6">
           Powered by AI & Deezer API
         </p>
       </div>

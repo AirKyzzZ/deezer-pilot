@@ -8,7 +8,7 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <div className="min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-deezer)] bg-black text-white selection:bg-deezer-purple selection:text-white">
+    <div className="min-h-screen p-6 pb-20 sm:p-12 font-[family-name:var(--font-deezer)] bg-black text-white selection:bg-deezer-purple selection:text-white">
       {/* Development Mode Banner */}
       {isDevelopmentMode && (
         <div className="max-w-6xl mx-auto mb-6 p-4 rounded-lg border border-yellow-500/30 bg-yellow-500/10 text-yellow-200 text-sm">
@@ -18,8 +18,8 @@ export default async function Home() {
         </div>
       )}
       
-      <header className="flex justify-between items-center max-w-6xl mx-auto mb-20 relative z-20">
-        <div className="text-5xl font-black tracking-normal">
+      <header className="flex justify-between items-center max-w-6xl mx-auto mb-12 relative z-20">
+        <div className="text-3xl md:text-4xl font-black tracking-normal">
           DEEZER <span className="text-deezer-purple">PILOT</span>
         </div>
         <div className="flex gap-4 items-center">
@@ -48,7 +48,7 @@ export default async function Home() {
         </div>
       </header>
 
-      <main className="flex flex-col gap-8 items-center w-full relative z-10">
+      <main className="flex flex-col gap-8 items-center w-full relative z-10 pt-8">
          <VibeAgent />
       </main>
       
